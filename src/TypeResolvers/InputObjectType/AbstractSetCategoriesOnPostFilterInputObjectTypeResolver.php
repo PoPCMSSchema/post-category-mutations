@@ -2,20 +2,14 @@
 
 declare(strict_types=1);
 
-namespace PoPSchema\PostCategoryMutations\SchemaHooks;
+namespace PoPSchema\PostCategoryMutations\TypeResolvers\InputObjectType;
 
-use GraphQLByPoP\GraphQLServer\TypeResolvers\ObjectType\MutationRootObjectTypeResolver;
-use PoP\Engine\TypeResolvers\ObjectType\RootObjectTypeResolver;
 use PoPSchema\Categories\TypeResolvers\ObjectType\CategoryObjectTypeResolverInterface;
-use PoPSchema\CustomPostCategoryMutations\Hooks\AbstractCustomPostMutationResolverHookSet;
+use PoPSchema\CustomPostCategoryMutations\TypeResolvers\InputObjectType\AbstractSetCategoriesOnCustomPostFilterInputObjectTypeResolver;
 use PoPSchema\PostCategories\TypeResolvers\ObjectType\PostCategoryObjectTypeResolver;
-use PoPSchema\PostMutations\SchemaHooks\PostMutationResolverHookSetTrait;
-use PoPSchema\Posts\TypeResolvers\ObjectType\PostObjectTypeResolver;
 
-class PostMutationResolverHookSet extends AbstractCustomPostMutationResolverHookSet
+abstract class AbstractSetCategoriesOnPostFilterInputObjectTypeResolver extends AbstractSetCategoriesOnCustomPostFilterInputObjectTypeResolver
 {
-    use PostMutationResolverHookSetTrait;
-
     private ?PostCategoryObjectTypeResolver $postCategoryObjectTypeResolver = null;
 
     final public function setPostCategoryObjectTypeResolver(PostCategoryObjectTypeResolver $postCategoryObjectTypeResolver): void
@@ -30,5 +24,10 @@ class PostMutationResolverHookSet extends AbstractCustomPostMutationResolverHook
     protected function getCategoryTypeResolver(): CategoryObjectTypeResolverInterface
     {
         return $this->getPostCategoryObjectTypeResolver();
+    }
+
+    protected function getEntityName(): string
+    {
+        return $this->getTranslationAPI()->__('post', 'postcategory-mutations');
     }
 }
